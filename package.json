@@ -1,0 +1,28 @@
+{
+  "name": "instagrameme",
+  "version": "1.0.0",
+  "description": "Instagram clone for practicing MERN",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nebirous/instagrameme.git"
+  },
+  "keywords": [
+    "practice",
+    "instagram",
+    "clone"
+  ],
+  "author": "nebirous",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nebirous/instagrameme/issues"
+  },
+  "homepage": "https://github.com/nebirous/instagrameme#readme",
+  "dependencies": {
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0"
+  }
+}
