@@ -1,20 +1,27 @@
-const express = require('express')
-const app = express()
-const PORT = 5000
+const express = require("express");
+require("dotenv/config");
+const app = express();
+const mongoose = require("mongoose");
+const PORT = 5000;
+const { User } = require("./models/user");
 
+const authRoutes = require("./routes/auth");
 
+app.use(authRoutes);
 
-const customMiddleware = (req, res, next)=>{
-    console.log("middleware executed")
-    next()
-}
+//Database
+mongoose
+  .connect(process.env.DB_CONNECT, {
+    dbName: "instagrameme",
+  })
+  .then(() => {
+    console.log("Database Connection is ready...");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
-app.use(customMiddleware)
-
-app.get('/', (req,res) =>{
-    res.send("hello world")
-})
-
-app.listen(PORT,() =>{
-    console.log("server running on", PORT)
-})
+//Server
+app.listen(PORT, () => {
+  console.log("server running on", PORT);
+});
