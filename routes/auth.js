@@ -9,6 +9,10 @@ router.get("/", (req, res) => {
   res.send("hello");
 });
 
+router.get("/", (req, res) => {
+  res.send("hello");
+});
+
 router.post("/register", async (req, res) => {
   console.log(req.body)
   const { name, email, password, city, country } = req.body;

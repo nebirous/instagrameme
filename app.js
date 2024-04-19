@@ -3,13 +3,16 @@ require("dotenv/config");
 const app = express();
 const mongoose = require("mongoose");
 const PORT = 5000;
-const authJwt = require('./helpers/jwt');
+const authJwt = require("./helpers/jwt");
+const errorHandler = require("./helpers/error-handler");
 const { User } = require("./models/user");
 
 const authRoutes = require("./routes/auth");
 
 app.use(express.json());
-app.use(authJwt);
+app.use(authJwt());
+app.use(errorHandler);
+
 app.use(authRoutes);
 
 //Database
