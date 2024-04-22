@@ -1,26 +1,20 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
 const router = express.Router();
-const mongoose = require("mongoose")
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
 const User = mongoose.model("User");
-const jwt = require('jsonwebtoken')
+const jwt = require("jsonwebtoken");
+const requireLogin = require("../helpers/requireLogin");
 
-router.get("/", (req, res) => {
-  res.send("hello");
-});
-
-router.get("/", (req, res) => {
+router.get("/", requireLogin, (req, res) => {
   res.send("hello");
 });
 
 router.post("/register", async (req, res) => {
-  console.log(req.body)
   const { name, email, password, city, country } = req.body;
 
   if (!name || !email || !password) {
-    return res
-      .status(422)
-      .json({ error: "please fill the required fields!" });
+    return res.status(422).json({ error: "please fill the required fields!" });
   }
 
   if (await User.findOne({ email: email })) {
@@ -49,23 +43,22 @@ router.post("/login", async (req, res) => {
 
   const user = await User.findOne({ email: email });
   if (!user) {
-    return res.status(400).send('User not found');
-  } 
-
-  if(!bcrypt.compareSync(password, user.password)){
-    return res.status(400).send('password is wrong!');
+    return res.status(400).send("User not found");
   }
-   
+
+  if (!bcrypt.compareSync(password, user.password)) {
+    return res.status(400).send("Invalid email or password!");
+  }
+
   const token = jwt.sign(
     {
-      userId: user.id,
-      isAdmin: user.isAdmin,
+      _id: user.id,
     },
     process.env.SECRET,
-    { expiresIn: '1d' }
+    { expiresIn: "1d" },
   );
-  
-  return res.status(200).send({ user: user.email, token: token });    
+
+  return res.status(200).send({ user: user.email, token: token });
 });
 
 module.exports = router;
