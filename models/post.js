@@ -25,6 +25,7 @@ const postSchema = new mongoose.Schema(
     postedBy: {
       type: ObjectId,
       ref: "User",
+      required: true,
     },
   },
   { timestamps: true },

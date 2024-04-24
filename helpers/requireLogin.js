@@ -14,7 +14,8 @@ module.exports = (req, res, next) => {
       res.status(401).send(err);
     }
 
-    const { userId } = payload;
+    const { _id: userId } = payload;
+
     User.findById(userId).then((userData) => {
       req.user = userData;
       next();
