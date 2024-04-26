@@ -19,3 +19,48 @@ a{
 btn.btn-submit{
   background-color: rgb(238, 110, 115) !important;
 }
+
+.input-field input[type=text]:focus {
+  border-bottom: 1px solid rgb(238, 110, 115) !important;
+  box-shadow: 0 1px 0 0 rgb(238, 110, 115)  !important;
+}
+.input-field input[type=password]:focus {
+  border-bottom: 1px solid rgb(238, 110, 115) !important;
+  box-shadow: 0 1px 0 0 rgb(238, 110, 115)  !important;
+}
+
+.gallery{
+  display:flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+}
+
+.gallery-item{
+  width: 30%;
+}
+
+.main-container{
+  max-width: 1050px; 
+  margin: 0px auto;
+}
+
+.profile-header{
+  display: flex;
+  justify-content: space-around;
+  margin: 18px 0px;
+  border-bottom: 1px solid grey;
+}
+
+.profile-header img{
+  width: 160px; height: 160px; border-radius: 80px;
+}
+
+.account-stats{
+  display: flex; 
+  justify-content: space-between;
+}
+
+.home-card{
+  height: max-contet;
+  margin: 26px auto;
+}
