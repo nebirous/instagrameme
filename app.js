@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv/config");
 const app = express();
+var cors = require("cors");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const PORT = 5000;
@@ -19,10 +20,12 @@ mongoose
   });
 
 const { User } = require("./models/user");
-const { Post } = require("./models/post");  
+const { Post } = require("./models/post");
 
 const postRoutes = require("./routes/posts");
 const authRoutes = require("./routes/auth");
+
+app.use(cors());
 
 app.use(express.json());
 app.use(bodyParser.json());
