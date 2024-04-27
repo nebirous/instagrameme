@@ -13,7 +13,13 @@ a{
   text-align: center;
   margin: 10px auto;
   max-width: 400px;
+}
 
+.post-card{
+  padding:20px;
+  text-align: center;
+  margin: 10px auto;
+  max-width: 400px;
 }
 
 btn.btn-submit{
@@ -63,4 +69,11 @@ btn.btn-submit{
 .home-card{
   height: max-contet;
   margin: 26px auto;
+}
+
+.btn-floating{
+  margin: 20px 20px;
+  position:fixed;
+  right:0;
+  bottom:0;
 }
