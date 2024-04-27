@@ -25,7 +25,7 @@ function App() {
         to="/create"
         class="btn-floating btn-large waves-effect waves-light red accent-1"
       >
-        <i class="material-icons">add</i>
+        <i class="material-icons">camera_alt</i>
       </Link>
     </BrowserRouter>
   )
