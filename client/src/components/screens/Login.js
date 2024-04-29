@@ -24,10 +24,11 @@ const Login = () => {
     })
       .then(res => res.json())
       .then(data => {
-        console.log(data)
         if (data.error) {
-          M.toast({ html: 'Log in failed', classes: 'red darken-3' })
+          M.toast({ html: data.error, classes: 'red darken-3' })
         } else {
+          localStorage.setItem('jwt', data.token)
+          localStorage.setItem('user', JSON.stringify(data.user))
           M.toast({ html: 'Log in successfull' })
           navigate('/profile')
         }
