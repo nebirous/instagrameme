@@ -59,7 +59,7 @@ router.post("/login", async (req, res) => {
     { expiresIn: "1d" },
   );
 
-  const { _id, name, emailSaved } = user;
+  const { _id, name, email: emailSaved } = user;
   return res
     .status(200)
     .json({ user: { id: _id, name: name, email: emailSaved }, token: token });
