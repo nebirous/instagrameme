@@ -29,7 +29,7 @@ const Register = () => {
         if (data.error) {
           M.toast({ html: data.error })
         } else {
-          navigate('/Profile')
+          navigate('/')
         }
       })
   }

@@ -37,6 +37,7 @@ router.post("/register", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
 
+  console.log(email, password);
   if (!email || !password) {
     return res.status(422).json({ error: "please fill the required fields!" });
   }
@@ -52,13 +53,16 @@ router.post("/login", async (req, res) => {
 
   const token = jwt.sign(
     {
-      _id: user.id,
+      _id: user._id,
     },
     process.env.SECRET,
     { expiresIn: "1d" },
   );
 
-  return res.status(200).send({ user: user.email, token: token });
+  const { _id, name, emailSaved } = user;
+  return res
+    .status(200)
+    .json({ user: { id: _id, name: name, email: emailSaved }, token: token });
 });
 
 module.exports = router;
