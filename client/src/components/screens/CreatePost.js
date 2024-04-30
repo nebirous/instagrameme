@@ -1,4 +1,5 @@
-import React, { useState, useNavigate } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import M from 'materialize-css'
 
 const CreatePost = () => {
@@ -7,6 +8,34 @@ const CreatePost = () => {
   const [description, setDescription] = useState('')
   const [image, setImage] = useState('')
   const [url, setUrl] = useState('')
+  useEffect(() => {
+    if (url) {
+      fetch('http://localhost:5000/createPost', {
+        method: 'post',
+        headers: {
+          'content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
+        },
+        body: JSON.stringify({
+          title: title,
+          description: description,
+          photo: url,
+        }),
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.error) {
+            M.toast({ html: data.error })
+          } else {
+            M.toast({
+              html: 'Post created successfully!',
+              classes: 'green darken-3',
+            })
+            navigate('/')
+          }
+        })
+    }
+  }, [url])
   const createPost = () => {
     const data = new FormData()
     data.append('file', image)
@@ -24,32 +53,6 @@ const CreatePost = () => {
           setUrl(data.url)
         }
       })
-      .then(
-        fetch('http://localhost:5000/createPost', {
-          method: 'post',
-          headers: {
-            'content-Type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
-          },
-          body: JSON.stringify({
-            title: title,
-            description: description,
-            photo: url,
-          }),
-        })
-          .then(res => res.json())
-          .then(data => {
-            if (data.error) {
-              M.toast({ html: data.error })
-            } else {
-              M.toast({
-                html: 'Post created successfully!',
-                classes: 'green darken-3',
-              })
-              navigate('/')
-            }
-          }),
-      )
   }
   return (
     <div className="card post-card input-field">
