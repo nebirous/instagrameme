@@ -42,7 +42,9 @@ btn.btn-submit{
 }
 
 .gallery-item{
-  width: 30%;
+  object-fit: cover;
+  height: 300px;
+  width: 300px;
 }
 
 .main-container{

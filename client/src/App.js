@@ -43,7 +43,6 @@ const Routing = () => {
 function App() {
   const [state, dispatch] = useReducer(reducer, initialState)
   const renderUploadButton = () => {
-    console.log('state')
     if (state) {
       return [
         <Link
