@@ -5,14 +5,44 @@ const Home = () => {
   useEffect(() => {
     fetch('/allPosts', {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
-      },
+        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+      }
     })
       .then(res => res.json())
       .then(result => {
+        console.log(result)
         setPosts(result.posts)
       })
   }, [])
+
+  const likePost = id => {
+    fetch('/like', {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+      },
+      body: JSON.stringify({
+        postId: id
+      })
+    })
+      .then(res => res.json())
+      .then(result => {
+        //   console.log(result)
+        const newData = posts.map(item => {
+          if (item._id === result._id) {
+            return result
+          } else {
+            return item
+          }
+        })
+        setPosts(newData)
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   return (
     <div className="home">
       {posts.map(post => {
@@ -23,7 +53,11 @@ const Home = () => {
               <img src={post.photo} alt="takefusa papadelta" />
             </div>
             <div className="card-content">
-              <i className="material-icons">favorite</i>
+              <i className="material-icons" onClick={likePost(post._id)}>
+                favorite
+              </i>
+              <i className="material-icons">favorite_border</i>
+              <h6>{post.likes.lenght ? post.likes.lenght : 0} likes</h6>
               <h6>{post.title}</h6>
               <p>{post.description}</p>
               <input type="text" placeholder="add a comment" />
