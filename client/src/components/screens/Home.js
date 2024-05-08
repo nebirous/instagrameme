@@ -53,7 +53,7 @@ const Home = () => {
               <img src={post.photo} alt="takefusa papadelta" />
             </div>
             <div className="card-content">
-              <i className="material-icons" onClick={likePost(post._id)}>
+              <i className="material-icons" onClick={() => likePost(post._id)}>
                 favorite
               </i>
               <i className="material-icons">favorite_border</i>
