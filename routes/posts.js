@@ -58,29 +58,32 @@ router.get("/post/:id", requireLogin, async (req, res) => {
 });
 
 router.put("/like", requireLogin, (req, res) => {
-  Post.findById
+  const post = Post.findById(req.body.postId);
+  console.log(post);
+
+  if (post.likes.includes(req.user._id)) {
+    console.log("unlike post");
+    Post.findByIdAndUpdate(
+      req.body.postId,
+      {
+        $pull: { likes: req.user._id },
+      },
+      {
+        new: true,
+      },
+    ).exec((err, result) => {
+      if (err) {
+        return res.status(422).json({ error: err });
+      } else {
+        return res.status(200).json(result);
+      }
+    });
+  }
+
   Post.findByIdAndUpdate(
     req.body.postId,
     {
       $push: { likes: req.user._id },
-    },
-    {
-      new: true,
-    },
-  ).exec((err, result) => {
-    if (err) {
-      return res.status(422).json({ error: err });
-    } else {
-      return res.status(200).json(result);
-    }
-  });
-});
-
-router.put("/unlike", requireLogin, (req, res) => {
-  Post.findByIdAndUpdate(
-    req.body.postId,
-    {
-      $pull: { likes: req.user._id },
     },
     {
       new: true,

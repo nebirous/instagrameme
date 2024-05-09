@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useContext } from 'react'
+import { userContext } from '../../App'
 
 const Home = () => {
   const [posts, setPosts] = useState([])
+  const { state, dispatch } = useContext(userContext)
   useEffect(() => {
     fetch('/allPosts', {
       headers: {
@@ -50,13 +52,14 @@ const Home = () => {
           <div className="card home-card" key={post._id}>
             <h5>{post.postedBy.name}</h5>
             <div className="card-image">
-              <img src={post.photo} alt="takefusa papadelta" />
+              <img src={post.photo} alt={post.title} />
             </div>
             <div className="card-content">
               <i className="material-icons" onClick={() => likePost(post._id)}>
-                favorite
+                {post.likes.includes(state._id)
+                  ? 'favorite'
+                  : 'favorite_border'}
               </i>
-              <i className="material-icons">favorite_border</i>
               <h6>{post.likes.lenght ? post.likes.lenght : 0} likes</h6>
               <h6>{post.title}</h6>
               <p>{post.description}</p>
