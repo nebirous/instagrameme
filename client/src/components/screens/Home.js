@@ -52,12 +52,20 @@ const Home = () => {
             <h5>{post.postedBy.name}</h5>
             <div className="card-image">
               {
-                //TODO: Like with double tap
+                //TODO: Animate double click to like
               }
-              <img src={post.photo} alt={post.title} />
+              <img
+                src={post.photo}
+                alt={post.title}
+                onDoubleClick={() => likePost(post._id)}
+              />
             </div>
+
             <div className="card-content">
-              <i className="material-icons" onClick={() => likePost(post._id)}>
+              <i
+                className="material-icons scale-transition"
+                onClick={() => likePost(post._id)}
+              >
                 {
                   //TODO: Animate Like Button
                 }
