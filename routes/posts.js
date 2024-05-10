@@ -8,6 +8,7 @@ const requireLogin = require("../helpers/requireLogin");
 router.get("/allPosts", requireLogin, async (req, res) => {
   const posts = await Post.find()
     .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
     .sort("-createdAt");
 
   if (!posts) return res.status(500).json({ error: "Post not found" });
@@ -61,8 +62,6 @@ router.put("/like", requireLogin, async (req, res) => {
   const post = await Post.findById(req.body.postId);
 
   if (post.likes.includes(req.user.id)) {
-    console.log("unlike post");
-
     const updatePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
@@ -76,7 +75,6 @@ router.put("/like", requireLogin, async (req, res) => {
     return res.status(200).json(updatePost);
   }
 
-  console.log("like post");
   const updatePost = await Post.findByIdAndUpdate(
     req.body.postId,
     {
@@ -88,6 +86,33 @@ router.put("/like", requireLogin, async (req, res) => {
   if (!updatePost) return res.status(500).send("like didnt work!");
 
   return res.status(200).json(updatePost);
+});
+
+router.put("/comment", requireLogin, async (req, res) => {
+  const comment = {
+    text: req.body.text,
+    postedBy: req.user._id,
+  };
+
+  if (!comment.text) {
+    return res.status(500).send("empty comment!");
+  }
+
+  const updateComment = await Post.findByIdAndUpdate(
+    req.body.postId,
+    {
+      $push: { comments: comment },
+    },
+    {
+      new: true,
+    },
+  )
+    .populate("comments.postedBy", "_id name")
+    .populate("postedBy", "_id name");
+
+  if (!updateComment) return res.status(500).send("comment didnt work!");
+
+  return res.status(200).json(updateComment);
 });
 
 module.exports = router;

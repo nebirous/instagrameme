@@ -3,6 +3,7 @@ import { userContext } from '../../App'
 
 const Home = () => {
   const [posts, setPosts] = useState([])
+  const [commentField, setCommentField] = useState('')
   const { state, dispatch } = useContext(userContext)
   useEffect(() => {
     fetch('/allPosts', {
@@ -44,6 +45,35 @@ const Home = () => {
       })
   }
 
+  const createComment = (text, postId) => {
+    fetch('/comment', {
+      method: 'put',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+      },
+      body: JSON.stringify({
+        text,
+        postId
+      })
+    })
+      .then(res => res.json())
+      .then(result => {
+        const newData = posts.map(item => {
+          if (item._id === result._id) {
+            return result
+          } else {
+            return item
+          }
+        })
+        setPosts(newData)
+        setCommentField('')
+      })
+      .catch(err => {
+        console.log(err)
+      })
+  }
+
   return (
     <div className="home">
       {posts.map(post => {
@@ -74,7 +104,31 @@ const Home = () => {
               <h6>{post.likes.length ? post.likes.length : 0} likes</h6>
               <h6>{post.title}</h6>
               <p>{post.description}</p>
-              <input type="text" placeholder="add a comment" />
+
+              {post.comments.map(record => {
+                console.log(record)
+                return (
+                  <h6 key={record._id}>
+                    <span style={{ fontWeight: '500' }}>
+                      {record.postedBy.name}
+                    </span>{' '}
+                    {record.text}
+                  </h6>
+                )
+              })}
+              <form
+                onSubmit={e => {
+                  e.preventDefault()
+                  createComment(e.target[0].value, post._id)
+                }}
+              >
+                <input
+                  value={commentField}
+                  onChange={e => setCommentField(e.target.value)}
+                  type="text"
+                  placeholder="add a comment"
+                />
+              </form>
             </div>
           </div>
         )
