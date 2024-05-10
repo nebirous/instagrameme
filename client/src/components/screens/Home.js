@@ -30,7 +30,6 @@ const Home = () => {
     })
       .then(res => res.json())
       .then(result => {
-        //   console.log(result)
         const newData = posts.map(item => {
           if (item._id === result._id) {
             return result
@@ -52,15 +51,19 @@ const Home = () => {
           <div className="card home-card" key={post._id}>
             <h5>{post.postedBy.name}</h5>
             <div className="card-image">
+              {
+                //TODO: Like with double tap
+              }
               <img src={post.photo} alt={post.title} />
             </div>
             <div className="card-content">
               <i className="material-icons" onClick={() => likePost(post._id)}>
-                {post.likes.includes(state._id)
-                  ? 'favorite'
-                  : 'favorite_border'}
+                {
+                  //TODO: Animate Like Button
+                }
+                {post.likes.includes(state.id) ? 'favorite' : 'favorite_border'}
               </i>
-              <h6>{post.likes.lenght ? post.likes.lenght : 0} likes</h6>
+              <h6>{post.likes.length ? post.likes.length : 0} likes</h6>
               <h6>{post.title}</h6>
               <p>{post.description}</p>
               <input type="text" placeholder="add a comment" />

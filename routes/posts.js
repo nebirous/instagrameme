@@ -57,44 +57,37 @@ router.get("/post/:id", requireLogin, async (req, res) => {
   return res.status(200).json({ post });
 });
 
-router.put("/like", requireLogin, (req, res) => {
-  const post = Post.findById(req.body.postId);
-  console.log(post);
+router.put("/like", requireLogin, async (req, res) => {
+  const post = await Post.findById(req.body.postId);
 
-  if (post.likes.includes(req.user._id)) {
+  if (post.likes.includes(req.user.id)) {
     console.log("unlike post");
-    Post.findByIdAndUpdate(
+
+    const updatePost = await Post.findByIdAndUpdate(
       req.body.postId,
       {
-        $pull: { likes: req.user._id },
+        $pull: { likes: req.user.id },
       },
-      {
-        new: true,
-      },
-    ).exec((err, result) => {
-      if (err) {
-        return res.status(422).json({ error: err });
-      } else {
-        return res.status(200).json(result);
-      }
-    });
+      { new: true },
+    );
+
+    if (!updatePost) return res.status(500).send("unlike didnt work!");
+
+    return res.status(200).json(updatePost);
   }
 
-  Post.findByIdAndUpdate(
+  console.log("like post");
+  const updatePost = await Post.findByIdAndUpdate(
     req.body.postId,
     {
-      $push: { likes: req.user._id },
+      $push: { likes: req.user.id },
     },
-    {
-      new: true,
-    },
-  ).exec((err, result) => {
-    if (err) {
-      return res.status(422).json({ error: err });
-    } else {
-      return res.status(200).json(result);
-    }
-  });
+    { new: true },
+  );
+
+  if (!updatePost) return res.status(500).send("like didnt work!");
+
+  return res.status(200).json(updatePost);
 });
 
 module.exports = router;
