@@ -74,12 +74,41 @@ const Home = () => {
       })
   }
 
+  const deletePost = postid => {
+    fetch(`/deletepost/${postid}`, {
+      method: 'delete',
+      headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('jwt')
+      }
+    })
+      .then(res => res.json())
+      .then(result => {
+        const newPost = posts.filter(item => {
+          return item._id !== result._id
+        })
+        setPosts(newPost)
+      })
+  }
+
   return (
     <div className="home">
       {posts.map(post => {
         return (
           <div className="card home-card" key={post._id}>
-            <h5>{post.postedBy.name}</h5>
+            <h5>
+              {post.postedBy.name}
+              {post.postedBy.id === state._id && (
+                <i
+                  className="material-icons"
+                  style={{
+                    float: 'right'
+                  }}
+                  onClick={() => deletePost(post._id)}
+                >
+                  delete
+                </i>
+              )}
+            </h5>
             <div className="card-image">
               {
                 //TODO: Animate double click to like

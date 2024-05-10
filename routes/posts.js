@@ -115,4 +115,20 @@ router.put("/comment", requireLogin, async (req, res) => {
   return res.status(200).json(updateComment);
 });
 
+router.delete("/deletepost/:postId", requireLogin, (req, res) => {
+  Post.findByIdAndRemove(req.params.postId)
+    .then((post) => {
+      if (post) {
+        return res.status(200).json(post);
+      } else {
+        return res
+          .status(404)
+          .json({ success: false, message: "post not found!" });
+      }
+    })
+    .catch((err) => {
+      return res.status(500).json({ success: false, error: err });
+    });
+});
+
 module.exports = router;
