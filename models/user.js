@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const { ObjectId } = mongoose.Schema.Types;
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -13,10 +14,6 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  isAdmin: {
-    type: Boolean,
-    default: false,
-  },
   city: {
     type: String,
     default: "",
@@ -25,6 +22,13 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: "",
   },
+  pic: {
+    type: String,
+    default:
+      "https://res.cloudinary.com/cnq/image/upload/v1586197723/noimage_d4ipmd.png",
+  },
+  followers: [{ type: ObjectId, ref: "User" }],
+  following: [{ type: ObjectId, ref: "User" }],
 });
 
 /* userSchema.virtual("id").get(function () {
