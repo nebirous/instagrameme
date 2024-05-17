@@ -7,7 +7,7 @@ import {
   Routes,
   Route,
   Link,
-  useNavigate,
+  useNavigate
 } from 'react-router-dom'
 import Home from './components/screens/Home'
 import Profile from './components/screens/Profile'
@@ -15,6 +15,7 @@ import Register from './components/screens/Register'
 import Login from './components/screens/Login'
 import CreatePost from './components/screens/CreatePost'
 import { initialState, reducer } from './reducers/userReducer'
+import UserProfile from './components/screens/UserProfile'
 
 export const userContext = createContext()
 
@@ -32,7 +33,7 @@ const Routing = () => {
   return (
     <Routes>
       <Route path="/" element={<Home />}></Route>
-      <Route path="/profile" element={<Profile />}></Route>
+      <Route path="/profile/:userid" element={<UserProfile />}></Route>
       <Route path="/register" element={<Register />}></Route>
       <Route path="/login" element={<Login />}></Route>
       <Route path="/create" element={<CreatePost />}></Route>
@@ -50,7 +51,7 @@ function App() {
           className="btn-floating btn-large waves-effect waves-light red accent-1"
         >
           <i className="material-icons">camera_alt</i>
-        </Link>,
+        </Link>
       ]
     }
   }
