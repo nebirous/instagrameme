@@ -6,9 +6,9 @@ const Profile = () => {
 
   const { state, dispatch } = useContext(userContext)
   const { userid } = useParams()
-  const [showfollow, setShowFollow] = useState(
-    state ? !state.following.includes(userid) : true
-  )
+  //   const [showfollow, setShowFollow] = useState(
+  //     state ? !state.following.includes(userid) : true
+  //   )
   useEffect(() => {
     fetch(`/user/${userid}`, {
       headers: {
@@ -17,7 +17,7 @@ const Profile = () => {
     })
       .then(res => res.json())
       .then(result => {
-        //console.log(result)
+        console.log('result: ' + result)
 
         setProfile(result)
       })
@@ -50,7 +50,7 @@ const Profile = () => {
             }
           }
         })
-        setShowFollow(false)
+        //setShowFollow(false)
       })
   }
   return (
@@ -90,7 +90,7 @@ const Profile = () => {
                 <h6>{userProfile.user.followers.length} followers</h6>
                 <h6>{userProfile.user.following.length} following</h6>
               </div>
-              {showfollow ? (
+              {/* {showfollow ? (
                 <button
                   style={{
                     margin: '10px'
@@ -109,8 +109,8 @@ const Profile = () => {
                   onClick={() => followUser()}
                 >
                   UnFollow
-                </button>
-              )}
+                </button> }
+              )*/}
             </div>
           </div>
 

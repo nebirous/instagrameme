@@ -1,26 +1,26 @@
 const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");
-const requireLogin = require("../middleware/requireLogin");
+const requireLogin = require("../helpers/requireLogin");
 const Post = mongoose.model("Post");
 const User = mongoose.model("User");
 
-router.get("/user/:id", requireLogin, (req, res) => {
-  const user = User.findById(req.params.id).select("-password");
+router.get("/user/:id", requireLogin, async (req, res) => {
+  const user = await User.findById(req.params.id).select("-password");
 
   if (!user) {
     return res.status(400).json({ Message: "User Not Found" });
   }
 
-  const posts = Post.find({ postedBy: req.params.id }).populate(
+  const posts = await Post.find({ postedBy: req.params.id }).populate(
     "postedBy",
     "_id name",
   );
-
   if (!posts) {
     return res.status(400).json({ Message: "Posts Not Found" });
   }
 
+  console.log(posts);
   return res.status(200).json({ user, posts });
 });
 

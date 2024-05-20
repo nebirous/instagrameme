@@ -8,6 +8,7 @@ const PORT = 5000;
 const errorHandler = require("./helpers/error-handler");
 
 //Database
+mongoose.set('strictQuery', true);
 mongoose
   .connect(process.env.DB_CONNECT, {
     dbName: "instagrameme",
@@ -24,6 +25,7 @@ const { Post } = require("./models/post");
 
 const postRoutes = require("./routes/posts");
 const authRoutes = require("./routes/auth");
+const userRoutes = require("./routes/user");
 
 app.use(cors());
 
@@ -34,6 +36,7 @@ app.use(errorHandler);
 
 app.use(authRoutes);
 app.use(postRoutes);
+app.use(userRoutes);
 
 //Server
 app.listen(PORT, () => {
