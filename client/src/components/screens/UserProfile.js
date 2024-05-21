@@ -20,6 +20,19 @@ const Profile = () => {
       })
   }, [])
 
+  const followUser = () => {
+    fetch('/follow', {
+      method: 'put',
+      headers: {
+        'Content-type': 'application/json',
+        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+      },
+      body: JSON.stringify({ followId: userid })
+    })
+      .then(res => res.json())
+      .then(data => console.log(data))
+  }
+
   return (
     <>
       {userProfile ? (
@@ -31,9 +44,9 @@ const Profile = () => {
             <div>
               <h3>{userProfile ? userProfile.user.name : ''}</h3>
               <div className="account-stats">
-                <h6>40 psoes</h6>
-                <h6>50 followers</h6>
-                <h6>5 following</h6>
+                <h6>{userProfile.posts.length} posts</h6>
+                <h6>{userProfile.user.following.length} following</h6>
+                <h6>{userProfile.user.followers.length} followers</h6>
               </div>
             </div>
           </div>

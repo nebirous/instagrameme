@@ -68,6 +68,10 @@ btn.btn-submit{
   justify-content: space-between;
 }
 
+.account-stats h6{
+  padding-left: 10px;
+}
+
 .home-card{
   height: max-contet;
   margin: 26px auto;
