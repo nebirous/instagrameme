@@ -1,51 +1,53 @@
-import React, { useEffect, useState, useContext } from 'react'
-import { userContext } from '../../App'
+import React, { useEffect, useState } from 'react'
 
 const Profile = () => {
-  const [posts, setPosts] = useState([])
-  const { state, dispatch } = useContext(userContext)
+  const [userProfile, setProfile] = useState(null)
   useEffect(() => {
-    fetch('/myPosts', {
+    fetch(`/profile`, {
       headers: {
-        'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
-      },
+        'Authorization': 'Bearer ' + localStorage.getItem('jwt')
+      }
     })
       .then(res => res.json())
       .then(result => {
-        setPosts(result.posts)
+        setProfile(result)
       })
   }, [])
+
   return (
-    <div>
-      <div className="profile-header">
+    <>
+      {userProfile ? (
         <div>
-          <img
-            src="https://avatars.githubusercontent.com/u/1801591?v=4"
-            alt="Profile pic"
-          />
-        </div>
-        <div>
-          <h3>{state ? state.name : ''}</h3>
-          <div className="account-stats">
-            <h6>40 psoes</h6>
-            <h6>50 followers</h6>
-            <h6>5 following</h6>
+          <div className="profile-header">
+            <div>
+              <img src={userProfile.user.pic} alt={userProfile.user.name} />
+            </div>
+            <div>
+              <h3>{userProfile ? userProfile.user.name : ''}</h3>
+              <div className="account-stats">
+                <h6>{userProfile.posts.length} posts</h6>
+                <h6>{userProfile.user.following.length} following</h6>
+                <h6>{userProfile.user.followers.length} followers</h6>
+              </div>
+            </div>
+          </div>
+          <div className="gallery">
+            {userProfile.posts.map(post => {
+              return (
+                <img
+                  className="gallery-item"
+                  src={post.photo}
+                  key={post._id}
+                  alt={post.title}
+                />
+              )
+            })}
           </div>
         </div>
-      </div>
-      <div className="gallery">
-        {posts.map(post => {
-          return (
-            <img
-              className="gallery-item"
-              src={post.photo}
-              key={post._id}
-              alt={post.title}
-            />
-          )
-        })}
-      </div>
-    </div>
+      ) : (
+        <h2>loading...!</h2>
+      )}
+    </>
   )
 }
 

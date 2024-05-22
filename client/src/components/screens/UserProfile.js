@@ -6,6 +6,7 @@ const Profile = () => {
 
   const { state, dispatch } = useContext(userContext)
   const { userid } = useParams()
+  const [showfollow, setShowFollow] = useState(true)
   useEffect(() => {
     fetch(`/user/${userid}`, {
       headers: {
@@ -14,8 +15,6 @@ const Profile = () => {
     })
       .then(res => res.json())
       .then(result => {
-        console.log('result: ' + result)
-
         setProfile(result)
       })
   }, [])
@@ -30,7 +29,38 @@ const Profile = () => {
       body: JSON.stringify({ followId: userid })
     })
       .then(res => res.json())
-      .then(data => console.log(data))
+      .then(result => {
+        dispatch({
+          type: 'UPDATE',
+          payload: {
+            following: DataTransfer.following,
+            followers: DataTransfer.followers
+          }
+        })
+        localStorage.setItem('user', JSON.stringify(result))
+        setProfile(prevState => {
+          if (userProfile.user.followers.includes(result._id)) {
+            const newFollowers = prevState.user.followers.filter(
+              item => item !== result._id
+            )
+
+            setShowFollow(true)
+            return {
+              ...prevState,
+              user: { ...prevState.user, followers: newFollowers }
+            }
+          }
+
+          setShowFollow(false)
+          return {
+            ...prevState,
+            user: {
+              ...prevState.user,
+              followers: [...prevState.user.followers, result._id]
+            }
+          }
+        })
+      })
   }
 
   return (
@@ -43,6 +73,25 @@ const Profile = () => {
             </div>
             <div>
               <h3>{userProfile ? userProfile.user.name : ''}</h3>
+              {showfollow ? (
+                <button
+                  className="btn btn-submit waves-effect waves-light red accent-1"
+                  type="submit"
+                  name="action"
+                  onClick={() => followUser()}
+                >
+                  Follow
+                </button>
+              ) : (
+                <button
+                  className="btn btn-submit waves-effect waves-light red accent-1"
+                  type="submit"
+                  name="action"
+                  onClick={() => followUser()}
+                >
+                  Unfollow
+                </button>
+              )}
               <div className="account-stats">
                 <h6>{userProfile.posts.length} posts</h6>
                 <h6>{userProfile.user.following.length} following</h6>

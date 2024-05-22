@@ -20,12 +20,26 @@ router.get("/user/:id", requireLogin, async (req, res) => {
     return res.status(400).json({ Message: "Posts Not Found" });
   }
 
-  console.log(posts);
+  return res.status(200).json({ user, posts });
+});
+
+router.get("/profile", requireLogin, async (req, res) => {
+  const user = await User.findById(req.user.id).select("-password");
+  if (!user) {
+    return res.status(400).json({ Message: "User Not Found" });
+  }
+  const posts = await Post.find({ postedBy: req.user.id }).populate(
+    "postedBy",
+    "_id name",
+  );
+  if (!posts) {
+    return res.status(400).json({ Message: "Posts Not Found" });
+  }
   return res.status(200).json({ user, posts });
 });
 
 router.put("/follow", requireLogin, async (req, res) => {
-  const user = await Post.findById(req.body.followId);
+  const user = await User.findById(req.body.followId).select("-password");
 
   if (!user.followers.includes(req.user.id)) {
     User.findByIdAndUpdate(
@@ -36,11 +50,11 @@ router.put("/follow", requireLogin, async (req, res) => {
       {
         new: true,
       },
-      (err, result) => {
-        if (!err) return res.status(500).json({ error: err });
-
+    )
+      .select("-password")
+      .then((result) => {
         User.findByIdAndUpdate(
-          req.body.followId,
+          req.user._id,
           {
             $push: { following: req.body.followId },
           },
@@ -53,39 +67,43 @@ router.put("/follow", requireLogin, async (req, res) => {
             return res.status(422).json({ error: err });
           });
 
-        return res.status(200).json({ Message: "Follow done", Result: result });
+        return res.status(200).json({ result });
+      })
+      .catch((err) => {
+        return res.status(422).json({ error: err });
+      });
+  } else {
+    User.findByIdAndUpdate(
+      req.body.followId,
+      {
+        $pull: { followers: req.user._id },
       },
-    );
+      {
+        new: true,
+      },
+    )
+      .select("-password")
+      .then((result) => {
+        User.findByIdAndUpdate(
+          req.user._id,
+          {
+            $pull: { following: req.body.followId },
+          },
+          {
+            new: true,
+          },
+        )
+          .select("-password")
+          .catch((err) => {
+            return res.status(422).json({ error: err });
+          });
+
+        return res.status(200).json({ result });
+      })
+      .catch((err) => {
+        return res.status(422).json({ error: err });
+      });
   }
-
-  User.findByIdAndUpdate(
-    req.body.followId,
-    {
-      $pull: { followers: req.user._id },
-    },
-    {
-      new: true,
-    },
-    (err, result) => {
-      if (!err) return res.status(500).json({ error: err });
-
-      User.findByIdAndUpdate(
-        req.body.followId,
-        {
-          $pull: { following: req.body.followId },
-        },
-        {
-          new: true,
-        },
-      )
-        .select("-password")
-        .catch((err) => {
-          return res.status(422).json({ error: err });
-        });
-
-      return res.status(200).json({ Message: "Follow done", Result: result });
-    },
-  );
 });
 
 router.put("/updatepic", requireLogin, (req, res) => {

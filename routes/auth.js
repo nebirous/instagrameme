@@ -55,7 +55,7 @@ router.post("/login", async (req, res) => {
       _id: user._id,
     },
     process.env.SECRET,
-    { expiresIn: "1d" },
+    { expiresIn: "10d" },
   );
 
   const { _id, name, email: emailSaved } = user;
