@@ -1,11 +1,15 @@
 # Instagrameme
-Practice to improve my knowledge on the MERN Stack (Mongo + Express + React + NodeJS).
+Instagram clone created to pratice and improve my knowledge on MERN Stack (Mongo + Express + React + NodeJS). 
 
-Based on the course of [Mukesh Phulwani](https://github.com/mukeshphulwani66) 
+## Functionalities implemented
+* Login and register
+* Photo uploading
+* Like functionality
+* Comments on photos
+* Profile page
+* Follow/Unfollow functionality
+* General and Following timelines
+* Basic user search
+* Password recovery and reset
 
-Other libraries used libraries: 
-* DotENV
-* Mongoose
-* Cors 
-* JWT
-* Materialize CSS
+Based on [Mukesh Phulwani](https://github.com/mukeshphulwani66) course
