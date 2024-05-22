@@ -13,7 +13,9 @@ function NavBar() {
         </li>,
 
         <li key="profile">
-          <Link to="/profile">Profile</Link>
+          <Link to="/profile">
+            <i className="material-icons scale-transition">person</i>
+          </Link>
         </li>,
         <li key="logout">
           <Link
@@ -24,7 +26,9 @@ function NavBar() {
               navigate('/login')
             }}
           >
-            Log out
+            <i className="material-icons scale-transition">
+              power_settings_new
+            </i>
           </Link>
         </li>
       ]
@@ -43,7 +47,7 @@ function NavBar() {
   return (
     <nav>
       <div className="nav-wrapper">
-        <Link to={state ? '/' : '/login'} className="brand-logo center">
+        <Link to={state ? '/myFollowing' : '/'} className="brand-logo center">
           Instagrameme
         </Link>
         <ul id="nav-mobile" className="right">

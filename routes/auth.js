@@ -11,7 +11,7 @@ router.get("/", requireLogin, (req, res) => {
 });
 
 router.post("/register", async (req, res) => {
-  const { name, email, password, city, country } = req.body;
+  const { name, email, password, pic } = req.body;
 
   if (!name || !email || !password) {
     return res.status(422).json({ error: "please fill the required fields!" });
@@ -24,8 +24,7 @@ router.post("/register", async (req, res) => {
     name: name,
     email: email,
     password: bcrypt.hashSync(req.body.password, 10),
-    city: city,
-    country: country,
+    pic: pic,
   });
   userSaved = await user.save();
 

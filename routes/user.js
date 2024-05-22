@@ -12,10 +12,9 @@ router.get("/user/:id", requireLogin, async (req, res) => {
     return res.status(400).json({ Message: "User Not Found" });
   }
 
-  const posts = await Post.find({ postedBy: req.params.id }).populate(
-    "postedBy",
-    "_id name",
-  );
+  const posts = await Post.find({ postedBy: req.params.id })
+    .sort("-createdAt")
+    .populate("postedBy", "_id name");
   if (!posts) {
     return res.status(400).json({ Message: "Posts Not Found" });
   }
@@ -24,10 +23,10 @@ router.get("/user/:id", requireLogin, async (req, res) => {
 });
 
 router.get("/profile", requireLogin, async (req, res) => {
-  const posts = await Post.find({ postedBy: req.user.id }).populate(
-    "postedBy",
-    "_id name",
-  );
+  const posts = await Post.find({ postedBy: req.user.id })
+    .sort("-createdAt")
+    .populate("postedBy", "_id name");
+
   if (!posts) {
     return res.status(400).json({ Message: "Posts Not Found" });
   }
@@ -48,7 +47,7 @@ router.put("/follow", requireLogin, async (req, res) => {
       },
     )
       .select("-password")
-      .then((result) => {
+      .then(() => {
         User.findByIdAndUpdate(
           req.user._id,
           {
@@ -59,11 +58,12 @@ router.put("/follow", requireLogin, async (req, res) => {
           },
         )
           .select("-password")
+          .then((result) => {
+            res.status(200).json(result);
+          })
           .catch((err) => {
             return res.status(422).json({ error: err });
           });
-
-        return res.status(200).json({ result });
       })
       .catch((err) => {
         return res.status(422).json({ error: err });
@@ -79,7 +79,7 @@ router.put("/follow", requireLogin, async (req, res) => {
       },
     )
       .select("-password")
-      .then((result) => {
+      .then(() => {
         User.findByIdAndUpdate(
           req.user._id,
           {
@@ -90,11 +90,12 @@ router.put("/follow", requireLogin, async (req, res) => {
           },
         )
           .select("-password")
+          .then((result) => {
+            res.status(200).json(result);
+          })
           .catch((err) => {
             return res.status(422).json({ error: err });
           });
-
-        return res.status(200).json({ result });
       })
       .catch((err) => {
         return res.status(422).json({ error: err });
