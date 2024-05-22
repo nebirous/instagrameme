@@ -7,7 +7,8 @@ import {
   Routes,
   Route,
   Link,
-  useNavigate
+  useNavigate,
+  useLocation
 } from 'react-router-dom'
 import Home from './components/screens/Home'
 import Profile from './components/screens/Profile'
@@ -17,16 +18,20 @@ import CreatePost from './components/screens/CreatePost'
 import { initialState, reducer } from './reducers/userReducer'
 import UserProfile from './components/screens/UserProfile'
 import MyFollowing from './components/screens/Following'
+import Reset from './components/screens/Reset'
+import NewPassword from './components/screens/NewPassword'
 
 export const userContext = createContext()
 
 const Routing = () => {
   const navigate = useNavigate()
+  const location = useLocation()
+  console.log(location)
   const { state, dispatch } = useContext(userContext)
   useEffect(() => {
     const user = JSON.parse(localStorage.getItem('user'))
     if (!user) {
-      return navigate('/login')
+      if (location.pathname !== '/reset') return navigate('/login')
     }
 
     dispatch({ type: 'USER', payload: user })
@@ -40,6 +45,8 @@ const Routing = () => {
       <Route path="/login" element={<Login />}></Route>
       <Route path="/myFollowing" element={<MyFollowing />}></Route>
       <Route path="/create" element={<CreatePost />}></Route>
+      <Route exact path="/reset" element={<Reset />}></Route>
+      <Route exact path="/reset/:token" element={<NewPassword />}></Route>
     </Routes>
   )
 }
