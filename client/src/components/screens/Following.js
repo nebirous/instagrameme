@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useContext } from 'react'
 import { userContext } from '../../App'
-import { Link } from 'react-router-dom'
 
-const Home = () => {
+const Following = () => {
   const [posts, setPosts] = useState([])
   const [commentField, setCommentField] = useState('')
-  const user = JSON.parse(localStorage.getItem('user'))
   const { state, dispatch } = useContext(userContext)
   useEffect(() => {
-    fetch('/allPosts', {
+    fetch('/myFollowing', {
       headers: {
         'Authorization': 'Bearer ' + localStorage.getItem('jwt')
       }
@@ -98,15 +96,7 @@ const Home = () => {
         return (
           <div className="card home-card" key={post._id}>
             <h5>
-              <Link
-                to={
-                  post.postedBy._id !== state._id
-                    ? '/user/' + post.postedBy._id
-                    : '/profile'
-                }
-              >
-                {post.postedBy.name}
-              </Link>
+              {post.postedBy.name}
               {post.postedBy.id === state._id && (
                 <i
                   className="material-icons"
@@ -145,20 +135,11 @@ const Home = () => {
               <p>{post.description}</p>
 
               {post.comments.map(record => {
+                console.log(record)
                 return (
                   <h6 key={record._id}>
                     <span style={{ fontWeight: '500' }}>
-                      {
-                        <Link
-                          to={
-                            record.postedBy._id !== user.id
-                              ? '/user/' + record.postedBy._id
-                              : '/profile'
-                          }
-                        >
-                          {record.postedBy.name}
-                        </Link>
-                      }
+                      {record.postedBy.name}
                     </span>{' '}
                     {record.text}
                   </h6>
@@ -185,4 +166,4 @@ const Home = () => {
   )
 }
 
-export default Home
+export default Following

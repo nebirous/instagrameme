@@ -16,6 +16,17 @@ router.get("/allPosts", requireLogin, async (req, res) => {
   return res.status(200).json({ posts });
 });
 
+router.get("/myFollowing", requireLogin, async (req, res) => {
+  const posts = await Post.find({postedBy:{$in:req.user.following}})
+    .populate("postedBy", "_id name")
+    .populate("comments.postedBy", "_id name")
+    .sort("-createdAt");
+
+  if (!posts) return res.status(500).json({ error: "Post not found" });
+
+  return res.status(200).json({ posts });
+});
+
 router.post("/createPost", requireLogin, async (req, res) => {
   const { title, description, photo } = req.body;
 

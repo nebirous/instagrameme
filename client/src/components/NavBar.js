@@ -8,6 +8,10 @@ function NavBar() {
   const renderList = () => {
     if (state) {
       return [
+        <li key="following">
+          <Link to="/myFollowing">Following</Link>
+        </li>,
+
         <li key="profile">
           <Link to="/profile">Profile</Link>
         </li>,
@@ -22,7 +26,7 @@ function NavBar() {
           >
             Log out
           </Link>
-        </li>,
+        </li>
       ]
     } else {
       return [
@@ -31,7 +35,7 @@ function NavBar() {
         </li>,
         <li key="register">
           <Link to="/register">Register</Link>
-        </li>,
+        </li>
       ]
     }
   }

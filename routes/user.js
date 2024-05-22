@@ -24,10 +24,6 @@ router.get("/user/:id", requireLogin, async (req, res) => {
 });
 
 router.get("/profile", requireLogin, async (req, res) => {
-  const user = await User.findById(req.user.id).select("-password");
-  if (!user) {
-    return res.status(400).json({ Message: "User Not Found" });
-  }
   const posts = await Post.find({ postedBy: req.user.id }).populate(
     "postedBy",
     "_id name",
@@ -35,7 +31,7 @@ router.get("/profile", requireLogin, async (req, res) => {
   if (!posts) {
     return res.status(400).json({ Message: "Posts Not Found" });
   }
-  return res.status(200).json({ user, posts });
+  return res.status(200).json(posts);
 });
 
 router.put("/follow", requireLogin, async (req, res) => {

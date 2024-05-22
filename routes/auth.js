@@ -58,10 +58,11 @@ router.post("/login", async (req, res) => {
     { expiresIn: "10d" },
   );
 
-  const { _id, name, email: emailSaved } = user;
-  return res
-    .status(200)
-    .json({ user: { id: _id, name: name, email: emailSaved }, token: token });
+  const { _id, name, email: emailSaved, following, followers, pic } = user;
+  return res.status(200).json({
+    user: { id: _id, name: name, email: emailSaved, following, followers, pic },
+    token: token,
+  });
 });
 
 module.exports = router;

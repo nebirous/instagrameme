@@ -11,7 +11,7 @@ const Login = () => {
   const PostData = () => {
     if (
       !/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(
-        email,
+        email
       )
     ) {
       return M.toast({ html: 'invalid email!' })
@@ -21,8 +21,8 @@ const Login = () => {
       headers: { 'content-Type': 'application/json' },
       body: JSON.stringify({
         email: email,
-        password: password,
-      }),
+        password: password
+      })
     })
       .then(res => res.json())
       .then(data => {
@@ -41,26 +41,32 @@ const Login = () => {
   return (
     <div className="card auth-card input-field">
       <h2>Instagrameme</h2>
-      <input
-        type="text"
-        placeholder="email"
-        value={email}
-        onChange={e => setEmail(e.target.value)}
-      />
-      <input
-        type="password"
-        placeholder="password"
-        value={password}
-        onChange={e => setPassword(e.target.value)}
-      />
-      <button
-        className="btn btn-submit waves-effect waves-light red accent-1"
-        type="submit"
-        name="action"
-        onClick={() => PostData()}
+      <form
+        onSubmit={e => {
+          e.preventDefault()
+        }}
       >
-        login
-      </button>
+        <input
+          type="text"
+          placeholder="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+        />
+        <button
+          className="btn btn-submit waves-effect waves-light red accent-1"
+          type="submit"
+          name="action"
+          onClick={() => PostData()}
+        >
+          login
+        </button>
+      </form>
       <p>
         <Link to="/Register"> Create a new account</Link>
       </p>
