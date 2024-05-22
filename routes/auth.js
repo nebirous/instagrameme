@@ -1,4 +1,5 @@
 const express = require("express");
+require("dotenv/config");
 const router = express.Router();
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
@@ -12,8 +13,7 @@ const sendgridTransport = require("nodemailer-sendgrid-transport");
 const transporter = nodemailer.createTransport(
   sendgridTransport({
     auth: {
-      api_key:
-        "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",
+      api_key: process.env.nodemailer,
     },
   }),
 );
